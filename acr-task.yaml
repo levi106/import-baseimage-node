@@ -1,9 +1,6 @@
 version: v1.1.0
 steps:
   # Log in to Docker Hub
-  - cmd: bash echo REGISTRY_FROM_URL {{.Values.REGISTRY_FROM_URL}}
-  - cmd: bash echo REGISTRY_FROM_USER {{.Values.REGISTRY_FROM_USER}}
-  - cmd: bash echo REGISTRY_FROM_PASSWORD {{.Values.REGISTRY_FROM_PASSWORD}}
   - cmd: >
       docker login {{.Values.REGISTRY_FROM_URL}} 
       --username '{{.Values.REGISTRY_FROM_USER}}' 
@@ -33,7 +30,7 @@ steps:
     # We do override the stable tag, 
     # but we also create a unique tag to enable rollback 
     # to a previously working image
-    # when: ['az-login', 'validate-base-image']
+    when: ['az-login', 'validate-base-image']
     cmd: >
       az acr import 
       --name {{.Values.REGISTRY}} 
