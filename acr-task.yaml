@@ -9,7 +9,7 @@ steps:
     # Build off the base image we'll track
     # Add a test script to do unit test validations
     build: >
-      --build-arg REGISTRY_URL={{.Values.REGISTRY_PUBLIC_URL}} 
+      --build-arg REGISTRY_URL={{.Values.REGISTRY_FROM_URL}} 
       -f ./Dockerfile
       -t {{.Run.Registry}}/node-import:test
       .
