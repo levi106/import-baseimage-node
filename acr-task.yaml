@@ -1,7 +1,10 @@
 version: v1.1.0
 steps:
   # Log in to Docker Hub
-  - cmd: docker login {{.Values.REGISTRY_PUBLIC_URL}} --username '{{.Values.REGISTRY_PUBLIC_USER}}' --password '{{.Values.REGISTRY_PUBLIC_PASSWORD}}'
+  - cmd: >
+      docker login {{.Values.REGISTRY_FROM_URL}} 
+      --username '{{.Values.REGISTRY_FROM_USER}}' 
+      --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
   - id: build-base-image-test
     # Build off the base image we'll track
     # Add a test script to do unit test validations
