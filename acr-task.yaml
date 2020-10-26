@@ -33,7 +33,7 @@ steps:
     when: ['az-login', 'validate-base-image']
     cmd: >
       az acr import 
-      --name {{.Values.REGISTRY_BASE_ARTIFACTS}} 
+      --name {{.Run.Registry}} 
       --source {{.Values.REGISTRY_FROM_URL}}node:15-alpine
       --username '{{.Values.REGISTRY_FROM_USER}}' 
       --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
