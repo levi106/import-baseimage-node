@@ -33,8 +33,11 @@ steps:
     when: ['az-login', 'validate-base-image']
     cmd: >
         docker pull {{.Values.REGISTRY_FROM_URL}}node:15-alpine
-  - id: push-base-image
+  - id: retag-base-image
     when: ['pull-base-image']
+    cmd: docker tag {{.Values.REGISTRY_FROM_URL}}node:15-alpine {{.Run.Registry}}/node:15-alpine
+  - id: push-base-image
+    when: ['retag-base-image']
     push: 
     - {{.Run.Registry}}/node:15-alpine
 #  - id: import-node-to-base-artifacts
