@@ -22,7 +22,7 @@ steps:
     # only continues if node-import:test returns a non-zero code
     when: ['build-base-image-test', 'az-login']
     cmd: {{.Run.Registry}}/node-import:test
-  - id: import-node-to-base-artifacts
+  - id: pull-base-image
     # Once login and image validation is/if complete, 
     # import the public image to base-artifacts
     # Note: we don't save the test validation image,
@@ -32,11 +32,24 @@ steps:
     # to a previously working image
     when: ['az-login', 'validate-base-image']
     cmd: >
-      az acr import 
-      --name {{.Run.Registry}} 
-      --source {{.Values.REGISTRY_FROM_URL}}node:15-alpine
-      --username '{{.Values.REGISTRY_FROM_USER}}' 
-      --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
-      -t node:15-alpine-{{.Run.ID}}
-      -t node:15-alpine
-      --force
+        docker pull {{.Values.REGISTRY_FROM_URL}}node:15-alpine
+  - id: push-base-image
+    when: ['pull-base-image']
+    push: 
+    - {{.Run.Registry}}/node:15-alpine
+#  - id: import-node-to-base-artifacts
+    # Once login and image validation is/if complete, 
+    # import the public image to base-artifacts
+    # Note: we don't save the test validation image,
+    # but the logs captures any log validation issues
+    # We do override the stable tag, 
+    # but we also create a unique tag to enable rollback 
+    # to a previously working image
+#    cmd: >
+#      az acr import 
+#      --name {{.Run.Registry}} 
+#      --source {{.Values.REGISTRY_FROM_URL}}node:15-alpine
+#      --username '{{.Values.REGISTRY_FROM_USER}}' 
+#      --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
+#      -t node:15-alpine
+#      --force
