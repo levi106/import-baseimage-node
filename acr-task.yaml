@@ -34,7 +34,7 @@ steps:
     cmd: >
       az acr import 
       --name {{.Values.REGISTRY}} 
-      --source {{.Values.REGISTRY_PUBLIC_URL}}node:15-alpine
+      --source {{.Values.REGISTRY_FROM_URL}}node:15-alpine
       -t node:15-alpine-{{.Run.ID}}
       -t node:15-alpine
       --force
