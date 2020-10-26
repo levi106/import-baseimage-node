@@ -1,6 +1,9 @@
 version: v1.1.0
 steps:
   # Log in to Docker Hub
+  - cmd: bash echo REGISTRY_FROM_URL {{.Values.REGISTRY_FROM_URL}}
+  - cmd: bash echo REGISTRY_FROM_USER {{.Values.REGISTRY_FROM_USER}}
+  - cmd: bash echo REGISTRY_FROM_PASSWORD {{.Values.REGISTRY_FROM_PASSWORD}}
   - cmd: >
       docker login {{.Values.REGISTRY_FROM_URL}} 
       --username '{{.Values.REGISTRY_FROM_USER}}' 
