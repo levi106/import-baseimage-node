@@ -31,5 +31,5 @@ steps:
   - id: push-base-image
     when: ['retag-base-image', 'retag-base-image-unique-tag']
     push: 
-    - {{.Run.Registry}}/node:15-alpine
-    - {{.Run.Registry}}/node:15-alpine-{{.Run.ID}}
+    - "{{.Run.Registry}}/node:15-alpine"
+    - "{{.Run.Registry}}/node:15-alpine-{{.Run.ID}}"
