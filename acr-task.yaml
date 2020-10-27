@@ -1,10 +1,5 @@
 version: v1.1.0
 steps:
-  # Log in to Docker Hub
-  - cmd: >
-      docker login {{.Values.REGISTRY_FROM_URL}} 
-      --username '{{.Values.REGISTRY_FROM_USER}}' 
-      --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
   - id: build-base-image-test
     # Build off the base image we'll track
     # Add a test script to do unit test validations
@@ -13,15 +8,9 @@ steps:
       -f ./Dockerfile
       -t {{.Run.Registry}}/node-import:test
       .
-#  - id: az-login
-    # login with the identity of the task
-    # run concurrently while the image is building: when: [-] indicates, wait for nothing
-#    cmd: >
-#      az login --identity > /dev/null
   - id: validate-base-image
     # only continues if node-import:test returns a non-zero code
-#    when: ['build-base-image-test', 'az-login']
-    when: ['build-base-image-test', 'az-login']
+    when: ['build-base-image-test']
     cmd: {{.Run.Registry}}/node-import:test
   - id: pull-base-image
     # Once login and image validation is/if complete, 
@@ -41,19 +30,3 @@ steps:
     when: ['retag-base-image']
     push: 
     - {{.Run.Registry}}/node:15-alpine
-#  - id: import-node-to-base-artifacts
-    # Once login and image validation is/if complete, 
-    # import the public image to base-artifacts
-    # Note: we don't save the test validation image,
-    # but the logs captures any log validation issues
-    # We do override the stable tag, 
-    # but we also create a unique tag to enable rollback 
-    # to a previously working image
-#    cmd: >
-#      az acr import 
-#      --name {{.Run.Registry}} 
-#      --source {{.Values.REGISTRY_FROM_URL}}node:15-alpine
-#      --username '{{.Values.REGISTRY_FROM_USER}}' 
-#      --password '{{.Values.REGISTRY_FROM_PASSWORD}}'
-#      -t node:15-alpine
-#      --force
