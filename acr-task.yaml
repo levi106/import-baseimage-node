@@ -13,13 +13,14 @@ steps:
       -f ./Dockerfile
       -t {{.Run.Registry}}/node-import:test
       .
-  - id: az-login
+#  - id: az-login
     # login with the identity of the task
     # run concurrently while the image is building: when: [-] indicates, wait for nothing
-    cmd: >
-      az login --identity > /dev/null
+#    cmd: >
+#      az login --identity > /dev/null
   - id: validate-base-image
     # only continues if node-import:test returns a non-zero code
+#    when: ['build-base-image-test', 'az-login']
     when: ['build-base-image-test', 'az-login']
     cmd: {{.Run.Registry}}/node-import:test
   - id: pull-base-image
