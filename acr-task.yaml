@@ -14,19 +14,15 @@ steps:
     # only continues if node-import:test returns a non-zero code
     when: ['build-test-base-image']
     cmd: "{{.Run.Registry}}/node-import:test"
-  - id: pull-base-image
+  - id: retag-base-image
     # import the public image to base-artifacts
     # Override the stable tag, 
     # and create a unique tag to enable rollback
     # to a previously working image
     when: ['validate-base-image']
-    cmd: >
-        docker pull {{.Values.REGISTRY_FROM_URL}}node:15-alpine
-  - id: retag-base-image
-    when: ['pull-base-image']
     cmd: docker tag {{.Values.REGISTRY_FROM_URL}}node:15-alpine {{.Run.Registry}}/node:15-alpine
   - id: retag-base-image-unique-tag
-    when: ['pull-base-image']
+    when: ['retag-base-image']
     cmd: docker tag {{.Values.REGISTRY_FROM_URL}}node:15-alpine {{.Run.Registry}}/node:15-alpine-{{.Run.ID}}
   - id: push-base-image
     when: ['retag-base-image', 'retag-base-image-unique-tag']
