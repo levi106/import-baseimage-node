@@ -1,5 +1,5 @@
 #!/bin/sh
-echo -e "\e[32mValiddating Image\e[0m"
+echo -e "\e[32mValidating Image\e[0m"
 
 echo NODE_VERSION: ${NODE_VERSION}
 echo BACKGROUND_COLOR: ${BACKGROUND_COLOR}
