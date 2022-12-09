@@ -1,13 +1,21 @@
 version: v1.1.0
 steps:
-  - id: pull-base-image
-    cmd: docker pull {{.Values.REGISTRY_FROM_URL}}helloworld:v1
+  - id: build-test-base-image
+    # Build off the base image we'll track
+    # Add a test script to do unit test validations
+    # Note: the test validation image isn't saved to the registry
+    # but the task logs captures log validation results
+    build: >
+      --build-arg REGISTRY_FROM_URL={{.Values.REGISTRY_FROM_URL}} 
+      -f ./Dockerfile
+      -t {{.Run.Registry}}/helloworld:test
+      .
   - id: retag-base-image
     # import the public image to base-artifacts
     # Override the stable tag, 
     # and create a unique tag to enable rollback
     # to a previously working image
-    when: ['pull-base-image']
+    when: ['build-test-base-image']
     cmd: docker tag {{.Values.REGISTRY_FROM_URL}}helloworld:v1 {{.Run.Registry}}/helloworld:v1
   - id: retag-base-image-unique-tag
     when: ['retag-base-image']
